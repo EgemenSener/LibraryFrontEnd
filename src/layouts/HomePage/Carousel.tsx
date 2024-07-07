@@ -1,3 +1,5 @@
+import { ReturnBook } from "./ReturnBook";
+
 export const Carousel = () => {
     return (
         <div className='container mt-5' style={{ height: 550 }}>
@@ -11,14 +13,17 @@ export const Carousel = () => {
                 <div className='carousel-inner'>
                     <div className='carousel-item active'>
                         <div className='row d-flex justify-content-center align-items-center'>
+                            <ReturnBook />
                         </div>
                     </div>
                     <div className='carousel-item'>
                         <div className='row d-flex justify-content-center align-items-center'>
+                            <ReturnBook />
                         </div>
                     </div>
                     <div className='carousel-item'>
                         <div className='row d-flex justify-content-center align-items-center'>
+                            <ReturnBook />
                         </div>
                     </div>
                 </div>
