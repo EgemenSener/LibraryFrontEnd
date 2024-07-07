@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import { Navbar } from './layouts/NavbarAndFooter/Navbar';
 
 function App() {
   return (
     <div className="App">
-      Welcome the Egemen's React App
+      <Navbar />
     </div>
   );
 }
