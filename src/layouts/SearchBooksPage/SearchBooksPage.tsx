@@ -15,6 +15,7 @@ export const SearchBooksPage = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [search, setSearch] = useState('');
     const [searchUrl, setSearchUrl] = useState('');
+    const [categorySelection, setCategorySelection] = useState('Book category');
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -79,6 +80,20 @@ export const SearchBooksPage = () => {
         )
     }
 
+    const categoryFiled = (value: string) => {
+        if(
+            value.toLowerCase() === 'fe' ||
+            value.toLowerCase() === 'be' ||
+            value.toLowerCase() === 'data' ||
+            value.toLowerCase() === 'devops'
+        ) {
+            setCategorySelection(value);
+            setSearchUrl(`/search/findByCategory?category=${value}&page=0&size=${booksPerPage}`)
+        } else {
+            setCategorySelection('All');
+            setSearchUrl(`?page=0&size=${booksPerPage}`);
+        }
+    }
     const searchHandleChange = () => {
         if (search === '') {
             setSearchUrl('');
@@ -114,30 +129,30 @@ export const SearchBooksPage = () => {
                                 <button className="btn btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    Category
+                                    {categorySelection}
                                 </button>
                                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li>
+                                    <li onClick={() => categoryFiled('All')}>
                                         <a className="dropdown-item" href="#">
                                             All
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFiled('FE')}>
                                         <a className="dropdown-item" href="#">
                                             Front End
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFiled('BE')}>
                                         <a className="dropdown-item" href="#">
                                             Back End
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFiled('Data')}>
                                         <a className="dropdown-item" href="#">
                                             Data
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFiled('DevOps')}>
                                         <a className="dropdown-item" href="#">
                                             DevOps
                                         </a>
