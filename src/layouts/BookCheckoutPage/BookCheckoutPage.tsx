@@ -67,7 +67,7 @@ export const BookCheckoutPage = () => {
     }, [isCheckedOut]);
 
     useEffect(() => {
-        const fetchBooks = async () => {
+        const fetchBookReviews = async () => {
             const reviewUrl: string = `http://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}`;
 
             const responseReviews = await fetch(reviewUrl);
@@ -104,7 +104,7 @@ export const BookCheckoutPage = () => {
             setReviews(loadedReviews);
             setIsLoadingReview(false);
         };
-        fetchBooks().catch((error: any) => {
+        fetchBookReviews().catch((error: any) => {
             setIsLoading(false);
             setHttpError(error.message);
         })
