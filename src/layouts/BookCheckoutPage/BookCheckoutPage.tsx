@@ -32,6 +32,9 @@ export const BookCheckoutPage = () => {
     const [isCheckedOut, setIsCheckedOut] = useState(false);
     const [isLoadingBookCheckedOut, setIsLoadingBookCheckedOut] = useState(true);
 
+    //Payment
+    const [displayError, setDisplayError] = useState(false);
+
     const bookId = (window.location.pathname).split('/')[2];
 
     useEffect(() => {
@@ -112,7 +115,7 @@ export const BookCheckoutPage = () => {
 
     useEffect(() => {
         const fetchUserReviewBook = async () => {
-            if(authState && authState.isAuthenticated) {
+            if (authState && authState.isAuthenticated) {
                 const url = `${process.env.REACT_APP_API}/reviews/secure/user/book?bookId=${bookId}`
                 const requestOptions = {
                     method: 'GET',
@@ -123,7 +126,7 @@ export const BookCheckoutPage = () => {
                 };
 
                 const userReview = await fetch(url, requestOptions);
-                if(!userReview.ok) {
+                if (!userReview.ok) {
                     throw new Error('Something went wrong!');
                 }
                 const userReviewResponseJson = await userReview.json();
@@ -203,15 +206,17 @@ export const BookCheckoutPage = () => {
             }
         };
         const checkoutResponse = await fetch(url, requestOptions);
-        if(!checkoutResponse.ok) {
+        if (!checkoutResponse.ok) {
+            setDisplayError(true);
             throw new Error('Something went wrong!');
         }
+        setDisplayError(false);
         setIsCheckedOut(true);
     };
 
     async function submitReview(starInput: number, reviewDescription: string) {
         let bookId: number = 0;
-        if(book?.id) {
+        if (book?.id) {
             bookId = book.id;
         }
 
@@ -226,7 +231,7 @@ export const BookCheckoutPage = () => {
             body: JSON.stringify(reviewRequestModel)
         };
         const returnResponse = await fetch(url, requestOptions);
-        if(!returnResponse.ok) {
+        if (!returnResponse.ok) {
             throw new Error('Something went wrong!');
         }
         setIsReviewLeft(true);
@@ -248,6 +253,9 @@ export const BookCheckoutPage = () => {
     return (
         <div>
             <div className='container d-none d-lg-block'>
+                {displayError && <div className="alert alert-danger mt-3" role="alert">
+                    Please pay outstanding fees and/or return late book(s).
+                </div>}
                 <div className='row mt-5'>
                     <div className='col-sm-2 col-md-2'>
                         {book?.img ?
@@ -266,12 +274,15 @@ export const BookCheckoutPage = () => {
                         </div>
                     </div>
                     <CheckoutAndReviewBox book={book} mobile={false} currentLoansCount={currentLoansCount} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut}
-                        checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/>
+                        checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview} />
                 </div>
                 <hr />
                 <LatestReviews reviews={reviews} bookId={book?.id} mobile={false} />
             </div>
             <div className='container d-lg-none mt-5'>
+                {displayError && <div className="alert alert-danger mt-3" role="alert">
+                    Please pay outstanding fees and/or return late book(s).
+                </div>}
                 <div className='d-flex justify-content-center alighn-items-center'>
                     {book?.img ?
                         <img src={'data:image/jpeg;base64,' + book?.img} width='226' height='349' alt='Book' />
@@ -289,7 +300,7 @@ export const BookCheckoutPage = () => {
                     </div>
                 </div>
                 <CheckoutAndReviewBox book={book} mobile={true} currentLoansCount={currentLoansCount} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut}
-                    checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/>
+                    checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview} />
                 <hr />
                 <LatestReviews reviews={reviews} bookId={book?.id} mobile={true} />
             </div>
